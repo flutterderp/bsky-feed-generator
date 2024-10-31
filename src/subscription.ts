@@ -12,18 +12,37 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     // This logs the text of every post off the firehose.
     // Just for fun :)
     // Delete before actually using
-    for (const post of ops.posts.creates) {
+    /* for (const post of ops.posts.creates) {
       console.log(post.record.text)
-    }
+    } */
+
+    var filterStrings = ['lalafell', 'ララフェル', 'おはララ', 'おやララ', 'おつララ'],
+        regexFilter = new RegExp(filterStrings.join('|'), 'iv')
+
+    // console.log(regexFilter)
 
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
     const postsToCreate = ops.posts.creates
       .filter((create) => {
-        // only alf-related posts
-        return create.record.text.toLowerCase().includes('alf')
+        // only lalafell-related posts
+        // return create.record.text.toLowerCase().includes('alf')
+
+        // var result = create.record.text.toLowerCase().search(regexFilter)
+        var result = regexFilter.test(create.record.text.toLowerCase())
+
+        if (result === true) {
+          /* if (create.record.facets) {
+            console.log(create.record.facets)
+          } */
+
+          return create
+        }
+
+        // console.log(create.record.text.toLowerCase().search(regexFilter))
+        // return create.record.text.toLowerCase().search(regexFilter)
       })
       .map((create) => {
-        // map alf-related posts to a db row
+        // map lala-related posts to a db row
         return {
           uri: create.uri,
           cid: create.cid,

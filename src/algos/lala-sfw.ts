@@ -3,6 +3,8 @@ import { AppContext } from '../config'
 
 // max 15 chars
 export const shortname = 'whats-alf'
+// export const shortname = 'lala-sfw
+// why does changing this make the json feed return “UnsupportedAlgorithm”?
 
 export const handler = async (ctx: AppContext, params: QueryParams) => {
   let builder = ctx.db
